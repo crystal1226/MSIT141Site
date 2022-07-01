@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@section Styles{ 
+    <style>
+    h1{
+        background-color:lightgray
+    }
+        tr {
+            border: 1px solid gray;
+            border-collapse: collapse;
+            padding: 5px;            
+        }
+        td {
+            border: 1px solid gray;
+            padding:5px;
+        }
+    </style>
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <input type="button" id="btnClick" value="OK" />
+    <input type="button" id="btnHw" value="HW-Create table" />
+    <br />
+    <table id="table"></table>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@section Scripts{ 
+<script>
+    console.log("Hello");
+    $('.display-4').text("Welcome MVC!");
+
+    /*$('btnClick').click(function () { $('.display-4').css("background-color", "lightblue") });*/
+
+    var emp = {
+        "employees": [
+            { "name": "Tom", "workYears": 3, "salary": 35000 },
+            { "name": "Jack", "workYears": 5, "salary": 40000 },
+            { "name": "Mary", "workYears": 7, "salary": 45000 }
+        ]
+    };
+
+    //HW
+    document.querySelector("#btnHw").addEventListener("click", createTable);
+    function createTable() {
+        var s = "<tr><td>Name</td><td>WorkYears</td><td>Salary</td></tr>";
+        for (var i = 0; i < emp.employees.length; i++) {
+            s += `<tr><td>${emp.employees[i].name}</td><td>${emp.employees[i].workYears}</td><td>${emp.employees[i].salary}</td></tr>`    
+        }
+        document.querySelector("#table").innerHTML = s;
+    }
+    
+    //ES6
+    $('#btnClick').click(() => {        
+        emp.employees.forEach(employee => {
+            const { name, workYears, salary } = employee //解構賦值
+            console.log(name)
+            console.log(workYears)
+            console.log(salary)
+        })
+    });
+
+   
+
+</script>
+}

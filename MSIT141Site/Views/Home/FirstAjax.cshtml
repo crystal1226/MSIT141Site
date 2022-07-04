@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewData["Title"] = "FirstAjax";
+}
+
+<h1>FirstAjax</h1>
+<input type="text" class="form-control" id="txtName" name="name" placeholder="請輸入姓名" />
+<input type="text" class="form-control" id="txtAge" name="age" placeholder="請輸入年紀" />
+<button class="btn btn-primary m-md-3" id="btnStart">FirstAjax</button>
+<button type="button" class="btn btn-primary m-md-3" id="btnStop">Ajax Stop</button>
+<div id="divInfo"></div>
+
+@section Scripts
+{
+    <script>
+        //Ajax GET
+        const btnStart = document.querySelector("#btnStart");
+        const btnStop = document.querySelector("#btnStop");
+        const divInfo = document.querySelector("#divInfo");
+        const name = document.querySelector("#txtName");
+        const age = document.querySelector("#txtAge");
+
+        const xhr = new XMLHttpRequest();
+        btnStop.addEventListener("click", ()=>{
+            xhr.abort();
+        })
+
+        btnStart.addEventListener("click", () => {
+            //Step1--建立Ajax物件
+            const xhr = new XMLHttpRequest();
+
+            //Step3--在load事件中接收伺服器回傳結果string, xml or json
+            xhr.addEventListener("load", () => {
+                var data = xhr.responseText;
+                divInfo.innerHTML = `<h2>${data}</h2>`;
+            })
+
+            //loadstart--開始呼叫/觸發--要放在xhr.open()前
+            xhr.addEventListener("loadstart", () => {
+                console.log("loadstart");
+                btnStart.textContent = "Loading...";
+                btnStart.setAttribute("disabled", "disabled");
+            })
+
+            //Step2--對伺服器發出Request
+            //xhr.open("GET", `/Api/Index?name=${name.value}&age=${age.value}`);
+            //Ajax中路徑表達方式
+            const url = "@Url.Content("~/Api/Index")";    
+            const params = `?name=${name.value}&age=${age.value}`;
+            xhr.open("GET", url + params);
+            xhr.timeout = 3000;
+            xhr.send(); //這行才實際執行
+            
+            //loadend--要求完成，不論成功 或失敗皆觸發
+            xhr.addEventListener("loadend", () => {
+                console.log("loadend");                
+                btnStart.removeAttribute("disabled");
+                btnStart.textContent = "Ajax Start";
+            })
+
+            //timeout--超時即終止程式
+            xhr.addEventListener("timeout", () => {
+                console.log("timeout");
+                divInfo.innerHTML = "<h3>伺服器忙線中</h3>";
+            })
+            
+            //abort--終止程式
+            xhr.addEventListener("abort", () => {
+                console.log("abort");
+                divInfo.innerHTML = "<h3>程式執行已終止</h3>";
+            })            
+        })
+    </script>
+}
+

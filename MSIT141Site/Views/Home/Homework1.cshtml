@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "Homework1";
+}
+@section Styles{
+    <style>       
+        tr {
+            border: 1px solid gray;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        td {
+            border: 1px solid gray;
+            padding: 5px;
+        }
+    </style>
+}
+<h1>Homework1--動態產生table</h1>
+
+<div class="text-center">    
+    <input type="button" id="btnHw" class="btn btn-primary" value="Create table" />
+    <table id="table" class="table table-bordered"></table>
+</div>
+
+@section Scripts{
+    <script>
+        var emp = {
+            "employees": [
+                { "name": "Tom", "workYears": 3, "salary": 35000 },
+                { "name": "Jack", "workYears": 5, "salary": 40000 },
+                { "name": "Mary", "workYears": 7, "salary": 45000 }
+            ]
+        };
+
+        document.querySelector("#btnHw").addEventListener("click", createTable);
+        function createTable() {
+            var s = "<tr><td>Name</td><td>WorkYears</td><td>Salary</td></tr>";
+            for (var i = 0; i < emp.employees.length; i++) {
+                s += `<tr><td>${emp.employees[i].name}</td><td>${emp.employees[i].workYears}</td><td>${emp.employees[i].salary}</td></tr>`
+            }
+            document.querySelector("#table").innerHTML = s;
+        }
+    </script>
+}

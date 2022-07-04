@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "Homework2";
+}
+@section Styles{
+    <style>
+        .unallowed {
+            color: red;
+        }
+
+        .allowed {
+            color: green;
+        }
+    </style>
+}
+<h1>Homework2--帳號驗證</h1>
+
+<form name="formInfo">
+    <div class="form-group">
+        <label for="txtName">姓名</label>
+        <input type="text" class="form-control" id="txtName" name="name">
+        <small id="check">帳號驗證</small><br />
+    </div>
+    <div class="form-group">
+        <label for="txtAge">年紀</label>
+        <input type="number" class="form-control" id="txtAge" name="age">
+    </div>
+    <div class="form-group">
+        <label for="txtEmail">電子郵件</label>
+        <input type="text" class="form-control" id="txtEmail" name="email">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<div class="alert alert-info" id="div1"></div>
+
+@section Scripts{ 
+    <script>
+        const txtName = document.querySelector("#txtName");
+        const checkAccount = document.querySelector("#check");
+        txtName.addEventListener("blur", () => {
+            const xhr = new XMLHttpRequest();
+            const formData = new FormData(document.formInfo);
+
+            xhr.addEventListener("load", () => {
+                let data = xhr.responseText;
+                checkAccount.innerHTML = data;
+                if (data == "此帳號已被使用")
+                    checkAccount.className = "unallowed";
+                else
+                    checkAccount.className = "allowed";
+            })
+
+            xhr.open("POST", "@Url.Content("~/Home/CheckAccount")");
+            xhr.send(formData);
+        })
+    </script>
+}

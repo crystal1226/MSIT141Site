@@ -18,9 +18,19 @@
 }
 <h1>Homework1--動態產生table</h1>
 
-<div class="text-center">    
-    <input type="button" id="btnHw" class="btn btn-primary" value="Create table" />
-    <table id="table" class="table table-bordered"></table>
+<div class="text-center">
+    <input type="button" id="btnJs" class="btn btn-primary" value="Create table by JavaScript" />
+    <input type="button" id="btnjQuery" class="btn btn-primary" value="Create table by jQuery" />
+    <table id="table" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>WorkYears</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </div>
 
 @section Scripts{
@@ -33,13 +43,54 @@
             ]
         };
 
-        document.querySelector("#btnHw").addEventListener("click", createTable);
-        function createTable() {
-            var s = "<tr><td>Name</td><td>WorkYears</td><td>Salary</td></tr>";
-            for (var i = 0; i < emp.employees.length; i++) {
-                s += `<tr><td>${emp.employees[i].name}</td><td>${emp.employees[i].workYears}</td><td>${emp.employees[i].salary}</td></tr>`
+        //document.querySelector("#btnHw").addEventListener("click", createTable);
+        //function createTable() {
+        //    var s = "<tr><td>Name</td><td>WorkYears</td><td>Salary</td></tr>";
+        //    for (var i = 0; i < emp.employees.length; i++) {
+        //        s += `<tr><td>${emp.employees[i].name}</td><td>${emp.employees[i].workYears}</td><td>${emp.employees[i].salary}</td></tr>`
+        //    }
+        //    document.querySelector("#table").innerHTML = s;
+        //}
+
+        //JavaScript
+        document.querySelector("#btnJs").addEventListener("click", () => {
+            const tb = document.querySelector("#table>tbody");
+            tb.innerHTML = "";
+            const frag1 = document.createDocumentFragment();
+            for (let i = 0; i < emp.employees.length; i++) {
+                const cell1 = document.createElement("td");
+                const txt1 = document.createTextNode(emp.employees[i].name);
+                cell1.appendChild(txt1);
+                const cell2 = document.createElement("td");
+                const txt2 = document.createTextNode(emp.employees[i].workYears);
+                cell2.appendChild(txt2);
+                const cell3 = document.createElement("td");
+                const txt3 = document.createTextNode(emp.employees[i].salary);
+                cell3.appendChild(txt3);
+
+                const row = document.createElement("tr");
+                row.appendChild(cell1);
+                row.appendChild(cell2);
+                row.appendChild(cell3);
+
+                frag1.appendChild(row);
             }
-            document.querySelector("#table").innerHTML = s;
-        }
+            tb.appendChild(frag1);
+        })
+
+        //jQuery
+        $("#btnjQuery").on("click",()=> {
+            const frag2 = $(document.createDocumentFragment());
+            $.each(emp.employees, (index, employee) => {
+                const { name, workYears, salary } = employee;
+                const cell1 = $("<td></td>").text(name);
+                const cell2 = $("<td></td>").text(workYears);
+                const cell3 = $("<td></td>").text(salary);
+                const row = $("<tr></tr>").append([cell1, cell2, cell3]);
+                frag2.append(row);
+            })
+            $("#table>tbody").html(frag2);
+            }
+        )       
     </script>
 }

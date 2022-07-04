@@ -47,13 +47,10 @@ namespace MSIT141Site.Controllers
         public IActionResult CheckAccount(Users user)   //HW2--帳號驗證
         {            
             var members = (from m in _context.Members
-                                select m).ToList();           
-            foreach(var mem in members)
-            {
-                if(mem.Name==user.name)
-                    return Content("此帳號已被使用");
-            }
-            return Content("此帳號可以使用");        
+                                select m.Name).ToList();
+            if (members.Contains(user.name))
+                return Content("此帳號已被使用");
+            return Content("此帳號可以使用"); 
         }
 
         public IActionResult Privacy()

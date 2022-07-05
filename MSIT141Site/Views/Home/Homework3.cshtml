@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewData["Title"] = "Homework3";
+}
+
+<h1>Homework3--async await下拉式選單</h1>
+<select id="city" class="custom-select"></select>
+<select id="district" class="custom-select"></select>
+<select id="road" class="custom-select"></select>
+
+@section Scripts{ 
+    <script>
+    const selCity = document.querySelector("#city");
+    const selDistrict = document.querySelector("#district");
+    const selRoad = document.querySelector("#road");
+
+    //LoadCity
+    async function LoadCity() {
+        let response = await fetch("@Url.Content("~/Api/City")");
+        let datas = await response.json();
+        datas.forEach((city) => {
+            let opt = new Option(city, city);
+            selCity.options.add(opt);
+        })
+    }
+        LoadCity();
+
+    //LoadDistrict
+        selCity.addEventListener("change", LoadDistrict);
+        async function LoadDistrict() {
+            selDistrict.innerHTML = "";
+            selRoad.innerHTML = "";
+            const selectedCity = selCity.options[selCity.selectedIndex].value;
+            let response = await fetch("@Url.Content("~/Api/District")" + `?city=${selectedCity}`);
+            let datas = await response.json();
+            datas.forEach((district) => {
+                let opt = new Option(district, district);
+                selDistrict.options.add(opt);
+            })
+        }
+
+        //LoadRoad
+        selDistrict.addEventListener("change", LoadRoad);
+        async function LoadRoad() {
+            selRoad.innerHTML = "";
+            const selectedDistrict = selDistrict.options[selDistrict.selectedIndex].value;
+            let response = await fetch("@Url.Content("~/Api/Road")" + `?district=${selectedDistrict}`);
+            let datas = await response.json();
+            datas.forEach((road) => {
+                let opt = new Option(road, road);
+                selRoad.options.add(opt);
+            })
+        }
+
+    </script>
+}

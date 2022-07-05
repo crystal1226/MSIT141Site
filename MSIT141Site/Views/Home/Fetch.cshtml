@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "Fetch";
+}
+
+<h1>Fetch</h1>
+<img id="img1" />
+
+@section Scripts{
+    <script>
+        console.log(fetch('@Url.Content("~/Api/Index")'));  //回傳Promise物件
+        fetch("@Url.Content("~/Api/Index")")
+            .then(response => {
+                //console.log(response);
+                //console.log(response.ok);  //true
+                //console.log(response.status);
+                //console.log(response.headers.get('date'));
+                //console.log(response.headers.get('content-type'));
+                //console.log(response.body);
+                console.log(response.text());   //讀取純文字資料(為另一Promise物件)，此處可用不同方法讀取不同資料
+            }).then(data => {
+                console.log(data);
+            })
+
+        fetch("@Url.Content("~/Api/GetImageBytes/6")")
+            .then(response => response.blob())  //讀取二進位
+            .then(datas => {
+                const myImg = document.querySelector("#img1");
+                myImg.src = URL.createObjectURL(datas)
+            })
+
+        fetch("@Url.Content("~/Api/Members")")
+            .then(response => response.json())
+            .then(datas => console.log(datas));
+
+        //async await
+        async function LoadMembers(){
+            const response = await fetch("@Url.Content("~/Api/Members")");
+            const datas = await response.json();
+            datas.forEach(member => { console.log(member.name)});
+        }
+        LoadMembers();
+    </script>
+ }

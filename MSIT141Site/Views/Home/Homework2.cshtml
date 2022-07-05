@@ -40,19 +40,26 @@
         const checkAccount = document.querySelector("#check");
         txtName.addEventListener("blur", () => {
             const xhr = new XMLHttpRequest();
-            const formData = new FormData(document.formInfo);
-
+            //const formData = new FormData(document.formInfo); //傳送整個表單才需用formData
             xhr.addEventListener("load", () => {
                 let data = xhr.responseText;
-                checkAccount.innerHTML = data;
-                if (data == "此帳號已被使用")
-                    checkAccount.className = "unallowed";
-                else
-                    checkAccount.className = "allowed";
-            })
-
-            xhr.open("POST", "@Url.Content("~/Home/CheckAccount")");
-            xhr.send(formData);
+                if (txtName.value.trim() === "") {
+                    checkAccount.innerHTML = "請輸入帳號";
+                }
+                else {
+                    if (data == "True") {
+                        checkAccount.innerHTML = "帳號已被使用";
+                        checkAccount.className = "unallowed";
+                    }
+                    else {
+                        checkAccount.innerHTML = "帳號可使用";
+                        checkAccount.className = "allowed";
+                    }
+                }                
+            })       
+            xhr.open("GET", "@Url.Content("~/Home/CheckAccount")" + `/?name=${txtName.value}`);
+            xhr.send();
         })
+
     </script>
 }

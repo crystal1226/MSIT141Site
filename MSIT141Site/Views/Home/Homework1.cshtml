@@ -83,7 +83,7 @@
             const frag2 = $(document.createDocumentFragment());
             $.each(emp.employees, (index, employee) => {
                 const { name, workYears, salary } = employee;
-                const cell1 = $("<td></td>").text(name);
+                const cell1 = $("<td></td>").text(name);    //設定選取元素文字內容
                 const cell2 = $("<td></td>").text(workYears);
                 const cell3 = $("<td></td>").text(salary);
                 const row = $("<tr></tr>").append([cell1, cell2, cell3]);
